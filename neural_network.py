@@ -5,7 +5,7 @@ import tensorflow as tf
 # loading and preprocessing the data
 data = preprocess(load_dataset('dataset_files/main.csv'))
 # reading the data for debugging
-print(data.head())
+# print(data.head())
 # splitting the data for the machine learning model
 x_train, x_test, y_train, y_test = XY_split(data)
 
@@ -19,3 +19,5 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 numEpochs = 10
 
 history = model.fit(x_train, y_train, epochs=numEpochs, validation_data=(x_test, y_test))
+
+# different kinds of data metrics for the model
