@@ -11,7 +11,7 @@ data = preprocess(load_dataset('dataset_files/main.csv'))
 x_train, x_test, y_train, y_test = XY_split(data)
 
 # creating the logistic regresesion model
-# variable named svmm as svm already exists
+# variable named svmm as svm already exists as an object of a module
 svmm = svm.SVC()
 svmm.fit(x_train, y_train)
 
