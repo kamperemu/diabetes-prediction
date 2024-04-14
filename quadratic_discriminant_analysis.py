@@ -1,6 +1,7 @@
 # input.py file contains input functions that are common to all models.
 from input import load_dataset, preprocess, XY_split
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn import metrics
 
 # loading and preprocessing the data
 data = preprocess(load_dataset('dataset_files/main.csv'))
