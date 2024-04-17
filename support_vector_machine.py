@@ -1,27 +1,36 @@
 # input.py file contains input functions that are common to all models.
-from input import load_dataset, preprocess, XY_split
+import helper
 from sklearn import svm
-from sklearn import metrics 
+from sklearn.model_selection import cross_val_score
 
-# loading and preprocessing the data
-data = preprocess(load_dataset('dataset_files/main.csv'))
-# reading the data for debugging
-# print(data.head())
-# splitting the data for the machine learning model
-x_train, x_test, y_train, y_test = XY_split(data)
+def basicSVM():
+    # load the data
+    data = helper.loadXYtraintest()
 
-# creating the logistic regresesion model
-# variable named svmm as svm already exists as an object of a module
-svmm = svm.LinearSVC()
-svmm.fit(x_train, y_train)
+    # creating the support vector machine model
+    # variable named svmm as svm already exists as an object of a module
+    svmm = svm.LinearSVC()
+    svmm.fit(data['x_train'], data['y_train'])
+    data['y_pred'] = svmm.predict(data['x_test'])
 
-# different kinds of data metrics for the model
-score = svmm.score(x_test, y_test)
-print("Score:", score)
-y_pred = svmm.predict(x_test)
-confusion_array = metrics.confusion_matrix(y_test,y_pred,labels=[1,0])
-print("Confusion Matrix")
-print(confusion_array)
+    # output of data metrics of the model
+    helper.print_common_data_metrics(data['y_test'], data['y_pred'])
+
+
+basicSVM()
+
+def crossvalidateSVM():
+    # load the data
+    X, Y = helper.loadXY()
+
+    # creating the support vector machine model
+    svmm = svm.LinearSVC()
+
+    # cross validation
+    scores = cross_val_score(svmm, X, Y, cv=5)
+    print(scores)
+
+crossvalidateSVM()
 
 """
 # visual display for data meterics

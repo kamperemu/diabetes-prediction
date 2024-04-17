@@ -1,26 +1,35 @@
-# input.py file contains input functions that are common to all models.
-from input import load_dataset, preprocess, XY_split
+import helper
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
-from sklearn import metrics
+from sklearn.model_selection import cross_val_score
 
-# loading and preprocessing the data
-data = preprocess(load_dataset('dataset_files/main.csv'))
-# reading the data for debugging
-# print(data.head())
-# splitting the data for the machine learning model
-x_train, x_test, y_train, y_test = XY_split(data)
+def basicQDA():
+    # load the data
+    data = helper.loadXYtraintest()
 
-# creating the qda model
-qda = QuadraticDiscriminantAnalysis()
-qda.fit(x_train, y_train)
+    # creating the quadratic discriminant analysis model
+    qda = QuadraticDiscriminantAnalysis()
+    qda.fit(data['x_train'], data['y_train'])
+    data['y_pred'] = qda.predict(data['x_test'])
 
-# different kinds of data metrics for the model
-score = qda.score(x_test, y_test)
-print("Score:", score)
-y_pred = qda.predict(x_test)
-confusion_array = metrics.confusion_matrix(y_test,y_pred,labels=[1,0])
-print("Confusion Matrix")
-print(confusion_array)
+    # output of data metrics of the model
+    helper.print_common_data_metrics(data['y_test'], data['y_pred'])
+
+
+basicQDA()
+
+def crossvalidateQDA():
+    # load the data
+    X, Y = helper.loadXY()
+
+    # creating the quadratic discriminant analysis model
+    qda = QuadraticDiscriminantAnalysis()
+
+    # cross validation
+    scores = cross_val_score(qda, X, Y, cv=5)
+    print(scores)
+
+crossvalidateQDA()
+
 
 """
 # visual display for data meterics

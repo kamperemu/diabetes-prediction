@@ -1,32 +1,38 @@
-# input.py file contains input functions that are common to all models.
-from input import load_dataset, preprocess, XY_split
+import helper
 from sklearn.linear_model import LogisticRegression
-from sklearn import metrics
+from sklearn.model_selection import cross_val_score
 
-# loading and preprocessing the data
-data = preprocess(load_dataset('dataset_files/main.csv'))
-# reading the data for debugging
-# print(data.head())
-# splitting the data for the machine learning model
-x_train, x_test, y_train, y_test = XY_split(data)
+def basicLR():
+    # load the data
+    data = helper.loadXYtraintest()
 
-# creating the logistic regresesion model
-lr = LogisticRegression(max_iter = 300, class_weight='balanced')
-lr.fit(x_train, y_train)
+    # creating the logistic regresesion model
+    lr = LogisticRegression(max_iter = 300, class_weight='balanced')
+    lr.fit(data['x_train'], data['y_train'])
+    data['y_pred'] = lr.predict(data['x_test'])
 
-# different kinds of data metrics for the model
-score = lr.score(x_test, y_test)
-print("Score:", score)
-print("Coefficient:", lr.coef_)
+    # output of data metrics of the model
+    helper.print_common_data_metrics(data['y_test'], data['y_pred'])
 
-y_pred = lr.predict(x_test)
-f1_value = metrics.f1_score(y_test, y_pred)
-print("F1 Harmonic Mean:", f1_value)
 
-confusion_array = metrics.confusion_matrix(y_test,y_pred,labels=[1,0])
-print("\nConfusion Matrix")
-print(confusion_array)
-print(metrics.classification_report(y_test, y_pred, target_names=['No Diabetes', 'Diabetes']))
+basicLR()
+
+def crossvalidateLR():
+    # load the data
+    X, Y = helper.loadXY()
+
+    # creating the logistic regresesion model
+    lr = LogisticRegression(max_iter = 300, class_weight='balanced')
+
+    # cross validation
+    scores = cross_val_score(lr, X, Y, cv=5)
+    print(scores)
+
+crossvalidateLR()
+
+
+"""
+# visual display for data meterics
 
 # developing an ROC curve - credit : https://machinelearningmastery.com/roc-curves-and-precision-recall-curves-for-classification-in-python/
 import matplotlib.pyplot as plt
@@ -39,8 +45,8 @@ plt.ylabel('True Positive Rate')
 plt.title('ROC Curve')
 plt.show()
 
-"""
-# visual display for data meterics
+
+
 import seaborn as sn
 import matplotlib.pyplot as plt
 import pandas as pd

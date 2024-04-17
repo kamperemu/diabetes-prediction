@@ -1,5 +1,5 @@
 # input.py file contains input functions that are common to all models.
-from input import load_dataset, preprocess, XY_split
+from input import load_dataset, preprocess, XY_split, traintest_split
 import tensorflow as tf
 from sklearn.metrics import confusion_matrix
 
@@ -8,7 +8,7 @@ data = preprocess(load_dataset('dataset_files/main.csv'))
 # reading the data for debugging
 # print(data.head())
 # splitting the data for the machine learning model
-x_train, x_test, y_train, y_test = XY_split(data)
+x_train, x_test, y_train, y_test = traintest_split(data)
 
 # creating the neural network model
 model = tf.keras.models.Sequential([

@@ -32,4 +32,9 @@ def XY_split(data):
     Y = data['diabetes']
 
     # split the data into training and testing sets
+    return X, Y
+
+
+def traintest_split(data):
+    X, Y = XY_split(data)
     return train_test_split(X, Y, test_size=0.3, random_state=42)

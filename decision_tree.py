@@ -1,26 +1,35 @@
 # input.py file contains input functions that are common to all models.
-from input import load_dataset, preprocess, XY_split
+import helper
 from sklearn.tree import DecisionTreeClassifier
-from sklearn import metrics
+from sklearn.model_selection import cross_val_score
 
-# loading and preprocessing the data
-data = preprocess(load_dataset('dataset_files/main.csv'))
-# reading the data for debugging
-# print(data.head())
-# splitting the data for the machine learning model
-x_train, x_test, y_train, y_test = XY_split(data)
+def basicDT():
+    # load the data
+    data = helper.loadXYtraintest()
 
-# creating the decision tree
-tree = DecisionTreeClassifier(criterion="log_loss")
-tree.fit(x_train, y_train)
+    # creating the decision tree model
+    tree = DecisionTreeClassifier(criterion="log_loss")
+    tree.fit(data['x_train'], data['y_train'])
+    data['y_pred'] = tree.predict(data['x_test'])
 
-# different kinds of data metrics for the model
-score = tree.score(x_test, y_test)
-print("Score:", score)
-y_pred = tree.predict(x_test)
-confusion_array = metrics.confusion_matrix(y_test,y_pred,labels=[1,0])
-print("Confusion Matrix")
-print(confusion_array)
+    # output of data metrics of the model
+    helper.print_common_data_metrics(data['y_test'], data['y_pred'])
+
+
+basicDT()
+
+def crossvalidateDT():
+    # load the data
+    X, Y = helper.loadXY()
+
+    # creating the decision tree model
+    tree = DecisionTreeClassifier(criterion="log_loss")
+
+    # cross validation
+    scores = cross_val_score(tree, X, Y, cv=5)
+    print(scores)
+
+crossvalidateDT()
 
 """
 # visual display for data meterics
