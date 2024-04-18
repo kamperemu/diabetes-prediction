@@ -34,7 +34,7 @@ def classification_report(y_test, y_pred):
     return metrics.classification_report(y_test, y_pred, target_names=['No Diabetes', 'Diabetes'])
 
 def print_common_data_metrics(y_test, y_pred):
-    print("DATA METERICS")
+    print("DATA METRICS")
     print()
     print("Score:", score(y_test, y_pred))
     print("F1 Score:", metrics.f1_score(y_test, y_pred))
