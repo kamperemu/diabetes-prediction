@@ -1,13 +1,13 @@
 import helper
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, GridSearchCV
 
 def basicLR():
     # load the data
     data = helper.loadXYtraintest()
 
     # creating the logistic regresesion model
-    lr = LogisticRegression(max_iter = 300, class_weight='balanced')
+    lr = LogisticRegression(max_iter = 500, class_weight='balanced', C=1, dual=False, fit_intercept=True, penalty='l2', solver='liblinear')
     lr.fit(data['x_train'], data['y_train'])
     data['y_pred'] = lr.predict(data['x_test'])
 
@@ -22,7 +22,7 @@ def crossvalidateLR():
     X, Y = helper.loadXY()
 
     # creating the logistic regresesion model
-    lr = LogisticRegression(max_iter = 300, class_weight='balanced')
+    lr = LogisticRegression(max_iter = 500, class_weight='balanced', C=1, dual=False, fit_intercept=True, penalty='l2', solver='liblinear')
 
     # cross validation
     scores = cross_val_score(lr, X, Y, cv=5)
@@ -30,6 +30,25 @@ def crossvalidateLR():
 
 crossvalidateLR()
 
+def gridsearchLR():
+    # load the data
+    data = helper.loadXYtraintest()
+
+    # creating the support vector machine model
+    lr = LogisticRegression(max_iter = 500)
+
+    # grid search
+    param_grid = {'C': [0.1, 1, 10, 100, 1000],  
+              'penalty': ["l1", "l2", "elasticnet", "none"], 
+              'dual': [True, False],
+              'fit_intercept': [True, False],
+              'class_weight': ['balanced', None],
+              'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']}
+    grid = GridSearchCV(lr, param_grid, refit = True, verbose = 3)
+    grid.fit(data['x_train'], data['y_train'])
+    print(grid.best_params_) 
+
+# gridsearchLR()
 
 """
 # visual display for data meterics
