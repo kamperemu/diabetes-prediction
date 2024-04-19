@@ -13,9 +13,7 @@ def basicQDA():
 
     # output of data metrics of the model
     helper.print_common_data_metrics(data['y_test'], data['y_pred'])
-
-
-basicQDA()
+    return qda
 
 def crossvalidateQDA():
     # load the data
@@ -28,7 +26,7 @@ def crossvalidateQDA():
     scores = cross_val_score(qda, X, Y, cv=5)
     print(scores)
 
-crossvalidateQDA()
+    return sum(scores)/len(scores)
 
 def gridsearchQDA():
     # load the data
@@ -43,7 +41,10 @@ def gridsearchQDA():
     grid.fit(data['x_train'], data['y_train'])
     print(grid.best_params_) 
 
-# gridsearchQDA()
+if __name__ == "__main__":
+    basicQDA()
+    crossvalidateQDA()
+    # gridsearchQDA()
 
 """
 # visual display for data meterics

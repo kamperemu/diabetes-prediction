@@ -15,8 +15,7 @@ def basicDT():
     # output of data metrics of the model
     helper.print_common_data_metrics(data['y_test'], data['y_pred'])
 
-
-basicDT()
+    return tree
 
 def crossvalidateDT():
     # load the data
@@ -29,7 +28,7 @@ def crossvalidateDT():
     scores = cross_val_score(tree, X, Y, cv=5)
     print(scores)
 
-crossvalidateDT()
+    return sum(scores)/len(scores)
 
 def gridsearchDT():
     # load the data
@@ -46,7 +45,10 @@ def gridsearchDT():
     grid.fit(data['x_train'], data['y_train'])
     print(grid.best_params_) 
 
-# gridsearchDT()
+if __name__ == "__main__":
+    basicDT()
+    crossvalidateDT()
+    # gridsearchDT()
 
 """
 # visual display for data meterics

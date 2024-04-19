@@ -16,8 +16,7 @@ def basicSVM():
     # output of data metrics of the model
     helper.print_common_data_metrics(data['y_test'], data['y_pred'])
 
-
-basicSVM()
+    return svmm
 
 def crossvalidateSVM():
     # load the data
@@ -29,8 +28,7 @@ def crossvalidateSVM():
     # cross validation
     scores = cross_val_score(svmm, X, Y, cv=5)
     print(scores)
-
-crossvalidateSVM()
+    return sum(scores)/len(scores)
 
 def gridsearchSVM():
     # load the data
@@ -47,7 +45,10 @@ def gridsearchSVM():
     grid.fit(data['x_train'], data['y_train'])
     print(grid.best_params_) 
 
-# gridsearchSVM()
+if __name__ == "__main__":
+    basicSVM()
+    crossvalidateSVM()
+    # gridsearchSVM()
 
 """
 # visual display for data meterics

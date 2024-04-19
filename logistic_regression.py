@@ -13,9 +13,8 @@ def basicLR():
 
     # output of data metrics of the model
     helper.print_common_data_metrics(data['y_test'], data['y_pred'])
-
-
-basicLR()
+    
+    return lr
 
 def crossvalidateLR():
     # load the data
@@ -28,7 +27,7 @@ def crossvalidateLR():
     scores = cross_val_score(lr, X, Y, cv=5)
     print(scores)
 
-crossvalidateLR()
+    return sum(scores)/len(scores)
 
 def gridsearchLR():
     # load the data
@@ -48,7 +47,10 @@ def gridsearchLR():
     grid.fit(data['x_train'], data['y_train'])
     print(grid.best_params_) 
 
-# gridsearchLR()
+if __name__ == "__main__":
+    basicLR()
+    crossvalidateLR()
+    # gridsearchLR()
 
 """
 # visual display for data meterics
