@@ -3,18 +3,18 @@ from sklearn import metrics
 import pandas as pd
 
 # splits into X and Y
-def loadXY():
+def loadXY(feature_selection=True):
     # loading and preprocessing the data
     data = preprocess(load_dataset('dataset_files/main.csv'))
     # splitting into X and Y
-    return XY_split(data)
+    return XY_split(data, feature_selection)
 
 # splits into xtrain, xtest, ytrain, ytest
-def loadXYtraintest():
+def loadXYtraintest(feature_selection=True):
     # loading and preprocessing the data
     data = preprocess(load_dataset('dataset_files/main.csv'))
     # convert data to dictionary as it isn't very clean to return multiple values
-    x_train, x_test, y_train, y_test = traintest_split(data)
+    x_train, x_test, y_train, y_test = traintest_split(data, feature_selection)
     new_data = {
         "x_train": x_train,
         "x_test": x_test,
@@ -55,15 +55,4 @@ def print_common_data_metrics(y_test, y_pred, graphs=False):
         sn.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
 
         plt.show()
-
-def feature_selection():
-    from sklearn.feature_selection import SelectKBest
-    from sklearn.feature_selection import chi2
-    X, Y = loadXY()
-    bestfeatures = SelectKBest(score_func=chi2, k=8)
-    fit = bestfeatures.fit(X,Y)
-    dfscores = pd.DataFrame(fit.scores_)
-    dfcolumns = pd.DataFrame(X.columns)
-    featureScores = pd.concat([dfcolumns,dfscores],axis=1)
-    featureScores.columns = ['Specs','Score']
-    return featureScores.nlargest(8,'Score')
+    

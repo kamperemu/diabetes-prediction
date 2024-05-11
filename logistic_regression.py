@@ -1,6 +1,7 @@
 import helper
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score, GridSearchCV
+from sklearn.pipeline import Pipeline
 
 def basicLR():
     # load the data
@@ -45,7 +46,7 @@ def gridsearchLR():
               'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']}
     grid = GridSearchCV(lr, param_grid, refit = True, verbose = 3)
     grid.fit(data['x_train'], data['y_train'])
-    print(grid.best_params_) 
+    print(grid.best_params_)
 
 if __name__ == "__main__":
     basicLR()

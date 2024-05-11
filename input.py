@@ -23,10 +23,12 @@ def preprocess(data):
     # returns the processed data
     return data
 
-def XY_split(data):
+def XY_split(data, feature_selection=False):
 
     # choose the data columns to be used as features
     Xcols = ['gender', 'age', 'hypertension', 'heart_disease', 'smoking_history', 'bmi', 'HbA1c_level', 'blood_glucose_level']
+    if feature_selection:
+        Xcols = ['age', 'bmi', 'HbA1c_level', 'blood_glucose_level']
     X = data[Xcols]
     # choose the data column to be used as target
     Y = data['diabetes']
@@ -35,6 +37,6 @@ def XY_split(data):
     return X, Y
 
 
-def traintest_split(data):
-    X, Y = XY_split(data)
+def traintest_split(data, feature_selection=False):
+    X, Y = XY_split(data, feature_selection)
     return train_test_split(X, Y, test_size=0.3, random_state=42)
