@@ -1,22 +1,20 @@
-# input.py file contains input functions that are common to all models.
 import helper
 from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, GridSearchCV
 
 def basicGB():
     # load the data
     data = helper.loadXYtraintest()
 
     # creating the gradient boosting model
-    tree = GradientBoostingClassifier(loss = 'exponential')
+    tree = GradientBoostingClassifier(learning_rate = 0.1, loss = 'exponential', n_estimators = 200)
     tree.fit(data['x_train'], data['y_train'])
     data['y_pred'] = tree.predict(data['x_test'])
 
     # output of data metrics of the model
     helper.print_common_data_metrics(data['y_test'], data['y_pred'])
 
-
-basicGB()
+    return tree
 
 def crossvalidateGB():
     # load the data
@@ -28,8 +26,28 @@ def crossvalidateGB():
     # cross validation
     scores = cross_val_score(tree, X, Y, cv=5)
     print(scores)
+    
+    return sum(scores)/len(scores)
 
-crossvalidateGB()
+def gridsearchGB():
+    # load the data
+    data = helper.loadXYtraintest()
+
+    # creating the gradient boosting model
+    tree = GradientBoostingClassifier()
+
+    # grid search
+    param_grid = {'loss': ['deviance', 'exponential'],
+              'learning_rate': [0.1, 0.01, 0.001, 0.0001],
+              'n_estimators': [100, 200, 300, 400, 500]}
+    grid = GridSearchCV(tree, param_grid, refit = True, verbose = 3)
+    grid.fit(data['x_train'], data['y_train'])
+    print(grid.best_params_)
+
+if __name__ == "__main__":
+    basicGB()
+    crossvalidateGB()
+    # gridsearchGB()
 
 """
 # visual display for data meterics
