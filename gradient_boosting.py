@@ -7,7 +7,7 @@ def basicGB():
     data = helper.loadXYtraintest()
 
     # creating the gradient boosting model
-    tree = GradientBoostingClassifier(learning_rate = 0.1, loss = 'exponential', n_estimators = 200)
+    tree = GradientBoostingClassifier(max_depth=5, n_estimators=200, ccp_alpha=0.0001, learning_rate=0.1, loss='log_loss')
     tree.fit(data['x_train'], data['y_train'])
     data['y_pred'] = tree.predict(data['x_test'])
 
@@ -34,12 +34,12 @@ def gridsearchGB():
     data = helper.loadXYtraintest()
 
     # creating the gradient boosting model
-    tree = GradientBoostingClassifier()
+    tree = GradientBoostingClassifier(max_depth=5, n_estimators=200)
 
     # grid search
-    param_grid = {'loss': ['deviance', 'exponential'],
+    param_grid = {'loss': ['log_loss', 'exponential'],
               'learning_rate': [0.1, 0.01, 0.001, 0.0001],
-              'n_estimators': [100, 200, 300, 400, 500]}
+              'ccp_alpha': [1, 0.2, 0.1, 0.01, 0.001, 0.0001]}
     grid = GridSearchCV(tree, param_grid, refit = True, verbose = 3)
     grid.fit(data['x_train'], data['y_train'])
     print(grid.best_params_)
