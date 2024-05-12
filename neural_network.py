@@ -1,31 +1,98 @@
-# input.py file contains input functions that are common to all models.
-from input import load_dataset, preprocess, XY_split, traintest_split
 import tensorflow as tf
-from sklearn.metrics import confusion_matrix
+import helper
+from sklearn.model_selection import KFold, cross_val_score
+from scikeras.wrappers import KerasRegressor
 
-# loading and preprocessing the data
-data = preprocess(load_dataset('dataset_files/main.csv'))
-# reading the data for debugging
-# print(data.head())
-# splitting the data for the machine learning model
-x_train, x_test, y_train, y_test = traintest_split(data)
+'''
+dataset = 'set1', feature_selection = 0 -> ['relu', 'sigmoid', 'relu', 'adam', 'mean_squared_error']
+dataset = 'set2', feature_selection = 0 -> ['sigmoid', 'relu', 'relu', 'adam', 'mean_squared_error']
+dataset = 'combined', feature_selection = 0 -> ['sigmoid', 'relu', 'relu', 'adam', 'mean_squared_error']
+dataset = 'combined', feature_selection = 2 -> ['sigmoid', 'relu', 'sigmoid', 'adam', 'binary_crossentropy']
+'''
 
-# creating the neural network model
-model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(8, activation='relu', input_shape=(8,)),
-    tf.keras.layers.Dense(8, activation='relu'),
-    tf.keras.layers.Dense(1, activation='sigmoid')
-])
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-numEpochs = 10
 
-history = model.fit(x_train, y_train, epochs=numEpochs, validation_data=(x_test, y_test))
+def buildmodel(input_neurons, hidden_neurons=8, input_activation="relu", hidden_activation="sigmoid", output_activation="relu", model_optimizer="adam", model_loss="mean_squared_error"):
+  model = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(input_neurons, activation=input_activation, input_shape=(input_neurons,)),
+    tf.keras.layers.Dense(hidden_neurons, activation=hidden_activation),
+    tf.keras.layers.Dense(1, activation=output_activation)
+  ])
+  model.compile(optimizer=model_optimizer, loss=model_loss, metrics=['accuracy', 'mse'])
+  return(model)
 
-# different kinds of data metrics for the model (during the training process tensorflow already provides some meterics)
-y_pred = tf.round(model.predict(x_test))
-confusion_array = confusion_matrix(tf.round(y_test),y_pred,labels=[0,1])
-print("Confusion Matrix")
-print(confusion_array)
+def basicNN():
+  # load the data
+  data = helper.loadXYtraintest()
+
+  input_neurons = data['x_train'].shape[1]
+  
+
+  # creating the neural network model
+  model = buildmodel(input_neurons)
+  numEpochs = 10
+
+  history = model.fit(data['x_train'], data['y_train'], epochs=numEpochs, validation_data=(data['x_test'], data['y_test']))
+
+  # different kinds of data metrics for the model (during the training process tensorflow already provides some meterics)
+  data['y_pred'] = tf.round(model.predict(data['x_test']))
+
+  # output of data metrics of the model
+  helper.print_common_data_metrics(data['y_test'], data['y_pred'])
+
+  return model
+
+def crossvalidateNN():
+  # load the data
+  X, Y = helper.loadXY()
+
+  # https://stackoverflow.com/questions/48085182/cross-validation-in-keras
+
+  input_neurons = X.shape[1]
+
+  def buildcvmodel():
+    return buildmodel(input_neurons)
+
+  estimator= KerasRegressor(build_fn=buildcvmodel, epochs=10, batch_size=10, verbose=0)
+  kfold= KFold(n_splits=5)
+  results= cross_val_score(estimator, X, Y, cv=kfold)  # 2 cpus
+  return results.mean()
+
+def optimizeparameterNN():
+  # load the data
+  data = helper.loadXYtraintest()
+
+  input_neurons = data['x_train'].shape[1]
+  activations = ["relu", "sigmoid"]
+  optimizers = ["adam", "sgd"]
+  losses = ["binary_crossentropy", "mean_squared_error"]
+
+  best_results = 0
+  best_model = []
+  for activation1 in activations:
+    for activation2 in activations:
+      for activation3 in activations:
+        for optimizer in optimizers:
+          for loss in losses:
+            model = buildmodel(input_neurons, input_activation=activation1, hidden_activation=activation2, output_activation=activation3,model_optimizer=optimizer, model_loss=loss)
+            numEpochs = 10
+
+            history = model.fit(data['x_train'], data['y_train'], epochs=numEpochs, validation_data=(data['x_test'], data['y_test']))
+
+            # accuracy
+            results = model.evaluate(data['x_test'], data['y_test'])
+
+            if results[1] > best_results:
+              best_results = results[1]
+              best_model = [activation1, activation2, activation3, optimizer, loss]
+  print(best_model)
+  print(best_results)
+if __name__ == "__main__":
+  basicNN()
+  # print()
+  # print()
+  # print()
+  # print(crossvalidateNN())
+  #optimizeparameterNN()
 
 """
 # visual display for data meterics

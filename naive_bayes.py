@@ -3,9 +3,12 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import cross_val_score, GridSearchCV
 
 '''
-dataset = 'set1', 'set2' -> {'var_smoothing': 1e-05}
-dataset = 'combined' -> {'var_smoothing': 1e-09}
+dataset = 'set1', feature_selection = 0 -> {'var_smoothing': 1e-05}
+dataset = 'set2', feature_selection = 0 -> {'var_smoothing': 1e-09}
+dataset = 'combined', feature_selection = 0 -> {'var_smoothing': 1e-05}
+dataset = 'combined', feature_selection = 2 -> {'var_smoothing': 1e-05}
 '''
+
 
 def basicNB():
     # load the data
@@ -49,9 +52,8 @@ def gridsearchNB():
 
 if __name__ == "__main__":
     basicNB()
-    crossvalidateNB()
-    # print(helper.feature_selection())
-    gridsearchNB()
+    #crossvalidateNB()
+    #gridsearchNB()
 
 """
 # visual display for data meterics

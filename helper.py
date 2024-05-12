@@ -4,14 +4,14 @@ import pandas as pd
 
 # expieremntal settings variables
 # datasets available set1, set2, combined
-DATASET = "combined" 
+DATASET = "set2" 
 """
 Feature Selection
 - 0: All features
 - 1: Common features (across datasets)
 - 2: Important features (from features_selection.py)
 """
-FEATURE_SELECTION = 0
+FEATURE_SELECTION = 2
 
 def load_data(dataset):
     if dataset == "set2":

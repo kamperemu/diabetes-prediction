@@ -46,8 +46,8 @@ def gridsearchSVM():
 
 if __name__ == "__main__":
     basicSVM()
-    crossvalidateSVM()
-    # gridsearchSVM()
+    #crossvalidateSVM()
+    #gridsearchSVM()
 
 """
 # visual display for data meterics
