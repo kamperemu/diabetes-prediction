@@ -3,6 +3,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score, GridSearchCV
 from sklearn.pipeline import Pipeline
 
+
+'''
+dataset = 'set1', feature_selection = 0 -> {'C': 1, 'class_weight': None, 'dual': False, 'fit_intercept': True, 'penalty': 'l2', 'solver': 'liblinear'}
+'''
+
 def basicLR():
     # load the data
     data = helper.loadXYtraintest()
@@ -51,7 +56,7 @@ def gridsearchLR():
 if __name__ == "__main__":
     basicLR()
     crossvalidateLR()
-    # gridsearchLR()
+    gridsearchLR()
 
 """
 # visual display for data meterics
