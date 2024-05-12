@@ -11,7 +11,7 @@ dataset = 'combined', feature_selection = 2 -> ['sigmoid', 'relu', 'sigmoid', 'a
 '''
 
 
-def buildmodel(input_neurons, hidden_neurons=8, input_activation="relu", hidden_activation="sigmoid", output_activation="relu", model_optimizer="adam", model_loss="mean_squared_error"):
+def buildmodel(input_neurons, hidden_neurons=8, input_activation="sigmoid", hidden_activation="relu", output_activation="relu", model_optimizer="adam", model_loss="mean_squared_error"):
   model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(input_neurons, activation=input_activation, input_shape=(input_neurons,)),
     tf.keras.layers.Dense(hidden_neurons, activation=hidden_activation),
