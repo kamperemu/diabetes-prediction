@@ -2,30 +2,39 @@ from input import load_dataset, preprocess, XY_split, traintest_split
 from sklearn import metrics
 import pandas as pd
 
-# splits into X and Y
-def loadXY(feature_selection=True, dataset="Combined"):
-    # loading and preprocessing the data
-    if dataset == "Combined":
-        datafile = 'dataset_files/main_combined.csv'
-    else:
-        datafile = 'dataset_files/main.csv'
+# expieremntal settings variables
+# datasets available set1, set2, combined
+DATASET = "combined" 
+"""
+Feature Selection
+- 0: All features
+- 1: Common features (across datasets)
+- 2: Important features (from features_selection.py)
+"""
+FEATURE_SELECTION = 0
 
-    data = preprocess(load_dataset(datafile))
+def load_data(dataset):
+    if dataset == "set2":
+        return load_dataset("dataset_files/" + dataset + "/main.csv")
+    else:
+        return preprocess(load_dataset("dataset_files/" + dataset + "/main.csv"))
+
+# splits into X and Y
+def loadXY(feature_selection=FEATURE_SELECTION, dataset=DATASET):
+    # loading and preprocessing the data
+    data = load_data(dataset)
+    
     # splitting into X and Y
-    return XY_split(data, feature_selection)
+    return XY_split(data, feature_selection, dataset)
 
 # splits into xtrain, xtest, ytrain, ytest
-def loadXYtraintest(feature_selection=True, dataset = "Combined"):
+def loadXYtraintest(feature_selection=FEATURE_SELECTION, dataset=DATASET):
     # loading and preprocessing the data
-    if dataset == "Combined":
-        datafile = 'dataset_files/main_combined.csv'
-    else:
-        datafile = 'dataset_files/main.csv'
 
-    data = preprocess(load_dataset(datafile))
+    data = load_data(dataset)
 
     # convert data to dictionary as it isn't very clean to return multiple values
-    x_train, x_test, y_train, y_test = traintest_split(data, feature_selection)
+    x_train, x_test, y_train, y_test = traintest_split(data, feature_selection, dataset)
     new_data = {
         "x_train": x_train,
         "x_test": x_test,

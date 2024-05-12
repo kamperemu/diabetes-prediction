@@ -1,4 +1,3 @@
-# input.py file contains input functions that are common to all models.
 import helper
 from sklearn import svm
 from sklearn.model_selection import cross_val_score, GridSearchCV
