@@ -2,6 +2,8 @@ import helper
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import cross_val_score, GridSearchCV
 
+import warnings
+warnings.filterwarnings("ignore")
 
 '''
 dataset = 'set1', feature_selection = 0 -> {'ccp_alpha': 0.0001, 'learning_rate': 0.1, 'loss': 'exponential'}
@@ -53,9 +55,20 @@ def gridsearchGB():
     print(grid.best_params_)
 
 if __name__ == "__main__":
-    basicGB()
-    crossvalidateGB()
-    gridsearchGB()
+    model = basicGB()
+    #crossvalidateGB()
+    #gridsearchGB()
+    # user input
+    while True:
+        x = []
+        for i in helper.get_header()[:-1]:
+            x.append(int(input(f"Input {i}: ")))
+        print()
+        if model.predict([x]) == 0:
+            print("No Diabetes")
+        else:
+            print("Diabetes")
+        print()
 
 """
 # visual display for data meterics

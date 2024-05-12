@@ -1,7 +1,11 @@
 import tensorflow as tf
 import helper
+import pandas as pd
 from sklearn.model_selection import KFold, cross_val_score
 from scikeras.wrappers import KerasRegressor
+
+import warnings
+warnings.filterwarnings("ignore")
 
 '''
 dataset = 'set1', feature_selection = 0 -> ['relu', 'sigmoid', 'relu', 'adam', 'mean_squared_error']
@@ -29,7 +33,7 @@ def basicNN():
 
   # creating the neural network model
   model = buildmodel(input_neurons)
-  numEpochs = 10
+  numEpochs = 1
 
   history = model.fit(data['x_train'], data['y_train'], epochs=numEpochs, validation_data=(data['x_test'], data['y_test']))
 
@@ -87,12 +91,19 @@ def optimizeparameterNN():
   print(best_model)
   print(best_results)
 if __name__ == "__main__":
-  basicNN()
-  # print()
-  # print()
-  # print()
-  # print(crossvalidateNN())
+  model = basicNN()
+  #crossvalidateNN()
   #optimizeparameterNN()
+  while True:
+    x = pd.DataFrame(data=None, columns=helper.get_header()[:-1], index=[0])
+    for i in helper.get_header()[:-1]:
+      x[i] = int(input(f"Input {i}: "))
+    print()
+    if model.predict([x]) == 0:
+      print("No Diabetes")
+    else:
+      print("Diabetes")
+    print()
 
 """
 # visual display for data meterics

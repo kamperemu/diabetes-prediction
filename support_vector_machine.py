@@ -2,6 +2,9 @@ import helper
 from sklearn import svm
 from sklearn.model_selection import cross_val_score, GridSearchCV
 
+import warnings
+warnings.filterwarnings("ignore")
+
 def basicSVM():
     # load the data
     data = helper.loadXYtraintest()
@@ -45,9 +48,19 @@ def gridsearchSVM():
     print(grid.best_params_) 
 
 if __name__ == "__main__":
-    basicSVM()
+    model = basicSVM()
     #crossvalidateSVM()
     #gridsearchSVM()
+    while True:
+        x = []
+        for i in helper.get_header()[:-1]:
+            x.append(int(input(f"Input {i}: ")))
+        print()
+        if model.predict([x]) == 0:
+            print("No Diabetes")
+        else:
+            print("Diabetes")
+        print()
 
 """
 # visual display for data meterics

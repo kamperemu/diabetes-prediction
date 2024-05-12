@@ -3,6 +3,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score, GridSearchCV
 from sklearn.pipeline import Pipeline
 
+import warnings
+warnings.filterwarnings("ignore")
+
 '''
 dataset = 'set1', feature_selection = 0 -> {'C': 1, 'class_weight': None, 'dual': False, 'fit_intercept': True, 'penalty': 'l2', 'solver': 'liblinear'}
 '''
@@ -51,9 +54,19 @@ def gridsearchLR():
     print(grid.best_params_)
 
 if __name__ == "__main__":
-    basicLR()
-    crossvalidateLR()
+    model = basicLR()
+    # crossvalidateLR()
     # gridsearchLR()
+    while True:
+        x = []
+        for i in helper.get_header()[:-1]:
+            x.append(int(input(f"Input {i}: ")))
+        print()
+        if model.predict([x]) == 0:
+            print("No Diabetes")
+        else:
+            print("Diabetes")
+        print()
 
 """
 # visual display for data meterics

@@ -19,6 +19,10 @@ def load_data(dataset):
     else:
         return preprocess(load_dataset("dataset_files/" + dataset + "/main.csv"))
 
+def get_header():
+    data = load_data(DATASET)
+    return data.columns.values.tolist()
+
 # splits into X and Y
 def loadXY(feature_selection=FEATURE_SELECTION, dataset=DATASET):
     # loading and preprocessing the data
