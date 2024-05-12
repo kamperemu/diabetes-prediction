@@ -22,17 +22,27 @@ def preprocess(data, mode='combined'):
         data['smoking_history'] = slabel
     else:
         selected_rows = data['gender'] == 'Male'
-        data.loc[selected_rows, 'gender'] = '1'
+        data.loc[selected_rows, 'gender'] = 1
         selected_rows = data['gender'] == 'Female'
-        data.loc[selected_rows, 'gender'] = '0'
+        data.loc[selected_rows, 'gender'] = 0
         selected_rows = data['gender'] == 'Other'
-        data.loc[selected_rows, 'gender'] = '2'
+        data.loc[selected_rows, 'gender'] = 2
+        selected_rows = data['gender'] == '1'
+        data.loc[selected_rows, 'gender'] = 1
+        selected_rows = data['gender'] == '0'
+        data.loc[selected_rows, 'gender'] = 0
 
         selected_rows = data['smoking_history'] == 'current'
-        data.loc[selected_rows, 'smoking_history'] = '1'
-        data['smoking_history'] = [value if value in ['0','1'] else '0' for value in data['smoking_history']]
+        data.loc[selected_rows, 'smoking_history'] = 1
+        data['smoking_history'] = [value if value in [0,1] else 0 for value in data['smoking_history']]
 
     # returns the processed data
+    unique_values = data['smoking_history'].unique()
+    abc = data['gender'].unique()
+
+    # This will print all the unique values in the column
+    print(unique_values)
+    print(abc)
     return data
 
 def XY_split(data, feature_selection=False):
