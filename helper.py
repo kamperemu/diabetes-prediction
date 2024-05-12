@@ -3,16 +3,27 @@ from sklearn import metrics
 import pandas as pd
 
 # splits into X and Y
-def loadXY(feature_selection=True):
+def loadXY(feature_selection=True, dataset="Combined"):
     # loading and preprocessing the data
-    data = preprocess(load_dataset('dataset_files/main.csv'))
+    if dataset == "Combined":
+        datafile = 'dataset_files/main_combined.csv'
+    else:
+        datafile = 'dataset_files/main.csv'
+
+    data = preprocess(load_dataset(datafile))
     # splitting into X and Y
     return XY_split(data, feature_selection)
 
 # splits into xtrain, xtest, ytrain, ytest
-def loadXYtraintest(feature_selection=True):
+def loadXYtraintest(feature_selection=True, dataset = "Combined"):
     # loading and preprocessing the data
-    data = preprocess(load_dataset('dataset_files/main.csv'))
+    if dataset == "Combined":
+        datafile = 'dataset_files/main_combined.csv'
+    else:
+        datafile = 'dataset_files/main.csv'
+
+    data = preprocess(load_dataset(datafile))
+
     # convert data to dictionary as it isn't very clean to return multiple values
     x_train, x_test, y_train, y_test = traintest_split(data, feature_selection)
     new_data = {
