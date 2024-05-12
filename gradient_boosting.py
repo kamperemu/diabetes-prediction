@@ -2,6 +2,14 @@ import helper
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import cross_val_score, GridSearchCV
 
+
+'''
+dataset = 'set1', feature_selection = 0 -> {'ccp_alpha': 0.0001, 'learning_rate': 0.1, 'loss': 'exponential'}
+dataset = 'set1', feature_selection = 1 -> {'ccp_alpha': 0.0001, 'learning_rate': 0.01, 'loss': 'exponential'}
+dataset = 'set1', feature_selection = 2 -> {'ccp_alpha': 0.0001, 'learning_rate': 0.01, 'loss': 'exponential'}
+
+'''
+
 def basicGB():
     # load the data
     data = helper.loadXYtraintest()
@@ -34,12 +42,12 @@ def gridsearchGB():
     data = helper.loadXYtraintest()
 
     # creating the gradient boosting model
-    tree = GradientBoostingClassifier(max_depth=5, n_estimators=200)
+    tree = GradientBoostingClassifier(n_estimators=200)
 
     # grid search
     param_grid = {'loss': ['log_loss', 'exponential'],
-              'learning_rate': [0.1, 0.01, 0.001, 0.0001],
-              'ccp_alpha': [1, 0.2, 0.1, 0.01, 0.001, 0.0001]}
+              'learning_rate': [0.1, 0.01, 0.001],
+              'ccp_alpha': [ 0.01, 0.001, 0.0001]}
     grid = GridSearchCV(tree, param_grid, refit = True, verbose = 3)
     grid.fit(data['x_train'], data['y_train'])
     print(grid.best_params_)
@@ -47,7 +55,7 @@ def gridsearchGB():
 if __name__ == "__main__":
     basicGB()
     crossvalidateGB()
-    # gridsearchGB()
+    gridsearchGB()
 
 """
 # visual display for data meterics

@@ -3,7 +3,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score, GridSearchCV
 from sklearn.pipeline import Pipeline
 
-
 '''
 dataset = 'set1', feature_selection = 0 -> {'C': 1, 'class_weight': None, 'dual': False, 'fit_intercept': True, 'penalty': 'l2', 'solver': 'liblinear'}
 '''
@@ -44,10 +43,8 @@ def gridsearchLR():
 
     # grid search
     param_grid = {'C': [0.1, 1, 10, 100, 1000],  
-              'penalty': ["l1", "l2", "elasticnet", "none"], 
-              'dual': [True, False],
+              'penalty': ["l1", "l2", "elasticnet", "none"],
               'fit_intercept': [True, False],
-              'class_weight': ['balanced', None],
               'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']}
     grid = GridSearchCV(lr, param_grid, refit = True, verbose = 3)
     grid.fit(data['x_train'], data['y_train'])
@@ -56,7 +53,7 @@ def gridsearchLR():
 if __name__ == "__main__":
     basicLR()
     crossvalidateLR()
-    gridsearchLR()
+    # gridsearchLR()
 
 """
 # visual display for data meterics

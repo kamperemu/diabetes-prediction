@@ -1,6 +1,6 @@
 import csv
 dict_of_data = {"age": {}, "bmi": {}}
-with open("main_combined.csv", mode="r") as file:
+with open("main.csv", mode="r") as file:
     csv_reader = csv.DictReader(file)
     for row in csv_reader:
         for key in row:
