@@ -2,6 +2,11 @@ import helper
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import cross_val_score, GridSearchCV
 
+'''
+dataset = 'set1', 'set2' -> {'var_smoothing': 1e-05}
+dataset = 'combined' -> {'var_smoothing': 1e-09}
+'''
+
 def basicNB():
     # load the data
     data = helper.loadXYtraintest()
@@ -45,8 +50,8 @@ def gridsearchNB():
 if __name__ == "__main__":
     basicNB()
     crossvalidateNB()
-    print(helper.feature_selection())
-    # gridsearchNB()
+    # print(helper.feature_selection())
+    gridsearchNB()
 
 """
 # visual display for data meterics
